@@ -4,6 +4,7 @@
 #define VOLUME_LABEL_ADDRESS 0x2B
 #define VOLUME_LABEL_SIZE 11
 
+void update_volume_label(Disk *disk);
 void read_volume_label(Disk *disk);
 
 int main(int argc, char* argv[]) {
@@ -19,11 +20,20 @@ int main(int argc, char* argv[]) {
         return -1;
     }
 
+    update_volume_label(disk);
     read_volume_label(disk);
 
     disk_close(disk);
 
     return 0;
+}
+
+void update_volume_label(Disk *disk) {
+    // the new label must be padded with spaces when not exactly 11 characters long
+    uint8_t buffer[VOLUME_LABEL_SIZE];
+    memcpy(buffer, "NEW_LABEL  ", VOLUME_LABEL_SIZE);
+
+    disk_write(disk, VOLUME_LABEL_ADDRESS, VOLUME_LABEL_SIZE, buffer);
 }
 
 void read_volume_label(Disk *disk) {
