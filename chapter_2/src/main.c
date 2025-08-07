@@ -15,6 +15,7 @@ int main(int argc, char* argv[]) {
 
     if(disk == NULL) {
         printf("can't open disk file\n");
+        return -1;
     }
 
     disk_read(disk, VOLUME_LABEL_ADDRESS, VOLUME_LABEL_SIZE, buffer);
